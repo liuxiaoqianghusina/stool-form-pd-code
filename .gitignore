@@ -1,0 +1,19 @@
+# Never commit data or outputs (UK Biobank material transfer agreement)
+data/
+results/
+figures/
+manuscript/
+*.csv
+*.tsv
+*.gz
+*.pkl
+*.xlsx
+*.docx
+*.pdf
+*.png
+*.tif
+*.XPT
+*.dat
+.DS_Store
+__pycache__/
+.Rhistory
