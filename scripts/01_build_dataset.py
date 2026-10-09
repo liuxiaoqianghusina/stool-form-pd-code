@@ -14,15 +14,15 @@ D = "/path/to/ukb_data/"
 OUT = "/path/to/project/data/"
 SPECIAL = {"1900-01-01", "1901-01-01", "1902-02-02", "1903-03-03", "1909-09-09", "2037-07-07"}
 
-rows = list(csv.DictReader(open(D + "app45551_20251118060954.dataset.data_dictionary.csv", encoding="utf-8")))
+rows = list(csv.DictReader(open(D + "ukb_data_dictionary.csv", encoding="utf-8")))
 codings = {}
-for r in csv.reader(open(D + "app45551_20251118060954.dataset.codings.csv", encoding="utf-8")):
+for r in csv.reader(open(D + "ukb_codings.csv", encoding="utf-8")):
     if r:
         codings.setdefault(r[0], {})[r[1]] = r[2]
 
 # ------------------------------------------------------------------ exposures (digestive health questionnaire)
 dig = [f"p{i}" for i in list(range(21023, 21045)) + [21064, 21065, 21066, 21067, 21068]]
-of = pd.read_csv(D + "UKB619657_online_followup_2025Nov.csv", usecols=["eid"] + dig, dtype=str)
+of = pd.read_csv(D + "ukb_online_followup.csv", usecols=["eid"] + dig, dtype=str)
 of["q_date"] = pd.to_datetime(of.p21023, errors="coerce")
 of = of[of.q_date.notna()].copy()
 num = lambda s: pd.to_numeric(s, errors="coerce")
@@ -39,14 +39,14 @@ of = of[["eid", "q_date", "bmf_day", "bmf_least_week", "bmf_most_day", "hard_sto
          "ibs_ever_dx_q", "sensitive_stomach", "bowel_satisfaction"]]
 
 # ------------------------------------------------------------------ baseline covariates (instance 0)
-header = open(D + "UKB619657_assessment_center_2025Nov.csv").readline().replace('"', "").strip().split(",")
+header = open(D + "ukb_assessment_center.csv").readline().replace('"', "").strip().split(",")
 want = [21003, 53, 54, 21000, 6138, 20116, 1558, 22040, 21001, 1309, 1289, 1299, 1438, 1448, 1458, 1468, 1528, 1488,
         1498, 137, 6154, 6150, 2443, 20127]
 ac_cols = ["eid"] + [c for c in header if re.match(r"p(\d+)_i0(_a\d+)?$", c)
                      and int(re.match(r"p(\d+)", c).group(1)) in want]
 ac_cols += [c for c in header if re.match(r"p20003_i0_a\d+$", c)]
-ac = pd.read_csv(D + "UKB619657_assessment_center_2025Nov.csv", usecols=ac_cols, dtype=str)
-pc = pd.read_csv(D + "UKB619657_population_characteristics_2025Nov.csv", usecols=["eid", "p31", "p34", "p52", "p22189"], dtype=str)
+ac = pd.read_csv(D + "ukb_assessment_center.csv", usecols=ac_cols, dtype=str)
+pc = pd.read_csv(D + "ukb_population_characteristics.csv", usecols=["eid", "p31", "p34", "p52", "p22189"], dtype=str)
 cv = ac.merge(pc, on="eid", how="left")
 n = lambda c: pd.to_numeric(cv[c], errors="coerce")
 cov = pd.DataFrame({"eid": cv.eid})
@@ -102,7 +102,7 @@ cov["iron_supp"] = medflag(r"ferrous|iron")
 cov["calcium_channel_blocker"] = medflag(r"amlodipine|nifedipine|felodipine|diltiazem|verapamil|lercanidipine")
 
 # ------------------------------------------------------------------ outcomes: first occurrences (3-character ICD-10)
-ho_header = open(D + "UKB619657_health_outcomes_2025Nov.csv").readline().replace('"', "").strip().split(",")
+ho_header = open(D + "ukb_health_outcomes.csv").readline().replace('"', "").strip().split(",")
 fo = {}
 label = {}
 for r in rows:
@@ -114,7 +114,7 @@ fo = {k: v for k, v in fo.items() if k[0] not in "OPQRSTUVWXYZ"}  # drop pregnan
 cancer_date_cols = [c for c in ho_header if c.startswith("p40005_i")]
 cancer_type_cols = [c for c in ho_header if c.startswith("p40006_i")]
 op_cols = ["p41272"] + [c for c in ho_header if c.startswith("p41282_a")]
-ho = pd.read_csv(D + "UKB619657_health_outcomes_2025Nov.csv",
+ho = pd.read_csv(D + "ukb_health_outcomes.csv",
                  usecols=["eid", "p40000_i0", "p40001_i0"] + list(fo.values()) + cancer_date_cols + cancer_type_cols + op_cols,
                  dtype=str)
 ho = ho[ho.eid.isin(of.eid)].reset_index(drop=True)

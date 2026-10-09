@@ -18,8 +18,8 @@ import os
 if os.path.exists(P + "data/imaging_qsm_raw.pkl"):  # cached extract of the 37 GB assessment-centre file
     img = pd.read_pickle(P + "data/imaging_qsm_raw.pkl")
 else:
-    header = open(D + "UKB619657_assessment_center_2025Nov.csv").readline().replace('"', "").strip().split(",")
-    img = pd.read_csv(D + "UKB619657_assessment_center_2025Nov.csv", usecols=[c for c in cols if c in header], dtype=str)
+    header = open(D + "ukb_assessment_center.csv").readline().replace('"', "").strip().split(",")
+    img = pd.read_csv(D + "ukb_assessment_center.csv", usecols=[c for c in cols if c in header], dtype=str)
     img.to_pickle(P + "data/imaging_qsm_raw.pkl")
 img["eid"] = img.eid.astype("int64")
 

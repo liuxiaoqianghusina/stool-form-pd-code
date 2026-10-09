@@ -6,11 +6,22 @@ The study relates stool form (frequency of hard and of loose stools) and bowel m
 
 ## Data
 
-No individual-level data are included in this repository. UK Biobank data are available to approved researchers through https://www.ukbiobank.ac.uk. NHANES 2005–2010 files and the public-use linked mortality files are available from the US Centers for Disease Control and Prevention. GWAS summary statistics were obtained from the GWAS Catalog (GCST90565484, stool frequency; GCST009325, Parkinson's disease) and from FinnGen release 12.
+This research was conducted using the UK Biobank Resource under application number 1099827. No individual-level data are included in this repository. UK Biobank data are available to approved researchers through https://www.ukbiobank.ac.uk. NHANES 2005–2010 files and the public-use linked mortality files are available from the US Centers for Disease Control and Prevention. GWAS summary statistics were obtained from the GWAS Catalog (GCST90565484, stool frequency; GCST009325, Parkinson's disease) and from FinnGen release 12.
 
 ## Setup
 
 Paths are written as placeholders. Before running, replace `/path/to/project/` with the project folder (which should contain `scripts/`, `data/`, `results/`, `figures/` and `manuscript/`) and `/path/to/ukb_data/` with the folder holding the UK Biobank extract files.
+
+The scripts expect the extract as comma-separated tables keyed by `eid`, with columns named by field (`p<field>_i<instance>_a<array>`), as exported from the UK Biobank Research Analysis Platform. The file names below are generic; rename your own exports to match or edit the paths in the scripts.
+
+| File | Contents |
+|---|---|
+| `ukb_online_followup.csv` | Digestive Health Questionnaire and other online follow-up fields |
+| `ukb_assessment_center.csv` | Assessment centre fields from baseline (instance 0) and the imaging visits (instances 2 and 3), including medications and brain imaging-derived phenotypes |
+| `ukb_population_characteristics.csv` | Sex, year and month of birth, Townsend deprivation index |
+| `ukb_health_outcomes.csv` | First occurrence dates, cancer registry, operations, algorithmically defined outcomes and death |
+| `ukb_additional_exposures.csv` | Accelerometer summary and quality fields |
+| `ukb_data_dictionary.csv`, `ukb_codings.csv` | Field dictionary and coding tables |
 
 Analyses were run with R 4.2.2 (survival 3.4.0, survey 4.4.2, mice 3.16.0, TwoSampleMR 0.7.11, MRPRESSO 1.0, data.table 1.15.4, splines) and Python 3.14 (pandas 2.3.3, numpy 2.4.6, scipy 1.17.1, statsmodels 0.14.6, matplotlib, python-docx, openpyxl, Pillow).
 
