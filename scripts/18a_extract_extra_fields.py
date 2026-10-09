@@ -5,9 +5,9 @@ import pandas as pd
 
 D = "/path/to/ukb_data/"
 P = "/path/to/project/"
-a = pd.read_csv(D + "UKB619657_online_followup_2025Nov.csv",
+a = pd.read_csv(D + "ukb_online_followup.csv",
                 usecols=["eid", "p21025", "p21035", "p21036", "p21038", "p21039"], dtype=str)
-b = pd.read_csv(D + "UKB619657_health_outcomes_2025Nov.csv", usecols=["eid", "p42032", "p42033", "p131023"], dtype=str)
+b = pd.read_csv(D + "ukb_health_outcomes.csv", usecols=["eid", "p42032", "p42033", "p131023"], dtype=str)
 d = a.merge(b, on="eid", how="outer")
 d.to_csv(P + "data/extra_fields.csv", index=False)
 print(len(d)); print(d.notna().sum().to_string())

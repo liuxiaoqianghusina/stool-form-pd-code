@@ -7,7 +7,7 @@ import pandas as pd
 
 D = "/path/to/ukb_data/"
 P = "/path/to/project/"
-cod4 = {r[1]: r[2] for r in csv.reader(open(D + "app45551_20251118060954.dataset.codings.csv", encoding="utf-8"))
+cod4 = {r[1]: r[2] for r in csv.reader(open(D + "ukb_codings.csv", encoding="utf-8"))
         if r and r[0] == "data_coding_4"}
 GROUPS = {
     "dip_drug": r"haloperidol|chlorpromazine|trifluoperazine|fluphenazine|flupentixol|flupenthixol|zuclopenthixol|sulpiride|"
